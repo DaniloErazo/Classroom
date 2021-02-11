@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="303.0" prefWidth="558.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <top>
+      <Label text="Sign In to Classroom" BorderPane.alignment="CENTER">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Label>
+   </top>
+   <center>
+      <Pane style="-fx-background-color: #b6edb2;" BorderPane.alignment="TOP_CENTER">
+         <children>
+            <Label layoutX="154.0" layoutY="60.0" text="Username:">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="154.0" layoutY="112.0" text="Password">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <TextField fx:id="txtUsernameL" layoutX="255.0" layoutY="61.0" />
+            <Button layoutX="186.0" layoutY="181.0" mnemonicParsing="false" onAction="#signUpWindow" style="-fx-background-color: #6ede66;" text="Sign Up">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Button>
+            <Button layoutX="323.0" layoutY="181.0" mnemonicParsing="false" onAction="#loginAccount" style="-fx-background-color: #6ede66;" text="Login">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Button>
+            <PasswordField fx:id="txtPassword" layoutX="255.0" layoutY="113.0" />
+         </children>
+      </Pane>
+   </center>
+</BorderPane>
