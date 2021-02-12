@@ -1,5 +1,7 @@
 package model;
 
+import java.time.LocalDate;
+
 public class UserAccount {
 	
 	private String username;
@@ -7,10 +9,10 @@ public class UserAccount {
 	private String photo;
 	private Gender gender;
 	private String degree;
-	private String date;
+	private LocalDate date;
 	private Browser browser;
 	
-	public UserAccount(String user, String pass, String pic, Gender gender, String career, String dat, Browser brow){
+	public UserAccount(String user, String pass, String pic, Gender gender, String career, LocalDate dat, Browser brow){
 		
 		username  = user;
 		password = pass;
@@ -26,6 +28,10 @@ public class UserAccount {
 	
 	public String getPhoto() {
 		return photo;
+	}
+
+	public String getPassword() {
+		return password;
 	}
 	
 

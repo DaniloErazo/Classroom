@@ -10,12 +10,6 @@
    <children>
       <MenuBar>
         <menus>
-          <Menu mnemonicParsing="false" text="Account">
-            <items>
-              <MenuItem mnemonicParsing="false" onAction="#loadLogin" text="Sign In" />
-                  <MenuItem mnemonicParsing="false" onAction="#loadCreateAccount" text="Sign Up" />
-            </items>
-          </Menu>
           <Menu mnemonicParsing="false" text="Help">
             <items>
               <MenuItem mnemonicParsing="false" onAction="#showAbout" text="About" />

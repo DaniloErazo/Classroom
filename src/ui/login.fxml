@@ -40,7 +40,7 @@
                   <Font size="14.0" />
                </font>
             </Button>
-            <PasswordField fx:id="txtPassword" layoutX="255.0" layoutY="113.0" />
+            <PasswordField fx:id="txtPasswordL" layoutX="255.0" layoutY="113.0" />
          </children>
       </Pane>
    </center>

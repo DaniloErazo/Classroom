@@ -1,7 +1,7 @@
 package ui;
 
 import java.io.IOException;
-
+import java.time.LocalDate;
 import java.io.File;
 
 import javafx.event.ActionEvent;
@@ -10,15 +10,19 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.MenuButton;
 import javafx.scene.control.PasswordField;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import model.Classroom;
 
 public class ClassroomGUI {
 	
-	@SuppressWarnings("unused")
 	private Classroom classroom;
 	
 	public ClassroomGUI(Classroom cr) {
@@ -26,13 +30,16 @@ public class ClassroomGUI {
 	}
 	
 	
-	public void initialize() {
-		
+	public void initialize() throws IOException {
+
 	}
 	
 	@FXML
     private BorderPane mainPanel;
 
+	
+	
+	//FXML elements and control for main pane
     @FXML
     public void loadCreateAccount(ActionEvent event) throws IOException {
     	
@@ -70,17 +77,41 @@ public class ClassroomGUI {
 	    alert.showAndWait();
     }
 	
-	@FXML
-    private TextField txtUsername;
+    //FXML elements for login page
+    @FXML
+    private TextField txtUsernameL;
 
     @FXML
-    private PasswordField txtPassword;
+    private PasswordField txtPasswordL;
+
+   
     
     @FXML
-    private TextField txtPhotoC;
+    public void loginAccount(ActionEvent event) {
+    	
+    	if(classroom.searchForAccount(txtUsernameL.getText())) {
+    		if(classroom.verifyPassword(txtUsernameL.getText(), txtPasswordL.getText())) {
+    			
+    		}else {
+    			
+    			Alert alert = new Alert(AlertType.WARNING);
+        	    alert.setTitle("Classroom");
+        	    alert.setHeaderText("Problem with password");
+        	    alert.setContentText("Wrong password, please verify");
 
-    @FXML
-    void loginAccount(ActionEvent event) {
+        	    alert.showAndWait();
+    			
+    		}
+    	}else {
+    		
+    		Alert alert = new Alert(AlertType.WARNING);
+    	    alert.setTitle("Classroom");
+    	    alert.setHeaderText("Problem with login");
+    	    alert.setContentText("The username isn´t resgistered, please verify");
+
+    	    alert.showAndWait();
+    		
+    	}
 
     }
 
@@ -94,6 +125,45 @@ public class ClassroomGUI {
 		mainPanel.getChildren().clear();
     	mainPanel.setTop(createPane);
     }
+    
+    
+    //FXML elements and control for createAccount 
+    
+    @FXML
+    private TextField txtUsernameC;
+
+    @FXML
+    private PasswordField txtPassword;
+    
+    @FXML
+    private TextField txtPhotoC;
+    
+    @FXML
+    private RadioButton maleBttn;
+
+    @FXML
+    private ToggleGroup gender;
+
+    @FXML
+    private RadioButton otherBttn;
+
+    @FXML
+    private RadioButton femaleBttn;
+    
+    @FXML
+    private CheckBox softwareCheck;
+
+    @FXML
+    private CheckBox telematicsCheck;
+
+    @FXML
+    private CheckBox industrialCheck;
+    
+    @FXML
+    private DatePicker txtBirthday;
+    
+    @FXML
+    private MenuButton browserMenu;
     
     @FXML
     public void browseFile(ActionEvent event) {
@@ -109,6 +179,75 @@ public class ClassroomGUI {
     }
     
     @FXML
+    public void toChrome(ActionEvent event) {
+    	browserMenu.setText("CHROME");
+    }
+
+    @FXML
+    public void toEdge(ActionEvent event) {
+    	browserMenu.setText("EDGE");
+    }
+
+    @FXML
+    public void toModzilla(ActionEvent event) {
+    	browserMenu.setText("MOZILLA");
+    }
+
+    @FXML
+    public void toOpera(ActionEvent event) {
+    	browserMenu.setText("OPERA");
+    }
+    
+    @FXML
+    public void createAccount(ActionEvent event) {
+    	if(!blanksRequired()) { //Validation for checking if all the blanks are filled
+    	    Alert alert = new Alert(AlertType.WARNING);
+    	    alert.setTitle("Classroom");
+    	    alert.setHeaderText("Problem with registration");
+    	    alert.setContentText("All blanks are required, please verify");
+
+    	    alert.showAndWait();
+    	} else {
+    		String username = txtUsernameC.getText(); //get data from user to create account
+    		if(!classroom.searchForAccount(username)) {
+    			String password = txtPassword.getText();
+    			String image = txtPhotoC.getText();
+    			String genderS = ((RadioButton)gender.getSelectedToggle()).getText();
+    			String career = "";
+    			if(softwareCheck.isSelected()) {
+    				career += softwareCheck.getText();
+    			}else if (telematicsCheck.isSelected()) {
+    				career += telematicsCheck.getText();
+    			}else if (industrialCheck.isSelected()) {
+    				career += industrialCheck.getText();
+    			}
+    			
+    			LocalDate birthday = txtBirthday.getValue();
+    			String browser = browserMenu.getText();
+    			
+    			classroom.addAccount(username, password, image, genderS, career, birthday, browser);
+    			
+    			Alert alert = new Alert(AlertType.INFORMATION);
+    			alert.setTitle("Account created");
+    			alert.setHeaderText(null);
+    			alert.setContentText("The account has been created succesfully");
+
+    			alert.showAndWait();
+    			} else {
+    			Alert alert = new Alert(AlertType.INFORMATION);
+    			alert.setTitle("Information Dialog");
+    			alert.setHeaderText(null);
+    			alert.setContentText("This username is already registered, please try again");
+
+    			alert.showAndWait();
+    			}
+    		}
+    	}
+    	
+    	
+    
+    
+    @FXML
     public void signInAfterCreate(ActionEvent event) throws IOException {
     	
     	FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login.fxml"));
@@ -120,5 +259,27 @@ public class ClassroomGUI {
     	mainPanel.setCenter(loginPane);
     }
     
+    //Validations
+    
+    public boolean blanksRequired() {
+    	boolean ready= true;
+    	if (txtUsernameC.getText().equals(" ")|| txtUsernameC.getText().equals("")) {
+			ready=false;
+		}else if (txtPassword.getText().equals(null)|| txtPassword.getText().equals("")) {
+			ready=false;
+		}else if (txtPhotoC.getText().equals(" ")|| txtPhotoC.getText().equals("")) {
+			ready = false;
+		}else if(!maleBttn.isSelected() && !femaleBttn.isSelected() && !otherBttn.isSelected()) {
+			ready=false;
+		}else if(!softwareCheck.isSelected() && !telematicsCheck.isSelected() && !industrialCheck.isSelected()) {
+			ready=false;
+		}else if(txtBirthday.getValue()==null) {
+			ready=false;
+		}else if (browserMenu.getText().equals("Browsers")) {
+			ready=false;
+		}
+		return ready;
+    	
+    }
     
 }
