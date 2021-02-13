@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.io.File;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,14 +14,21 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.FileChooser;
 import model.Classroom;
+import model.UserAccount;
 
 public class ClassroomGUI {
 	
@@ -30,9 +39,6 @@ public class ClassroomGUI {
 	}
 	
 	
-	public void initialize() throws IOException {
-
-	}
 	
 	@FXML
     private BorderPane mainPanel;
@@ -43,7 +49,7 @@ public class ClassroomGUI {
     @FXML
     public void loadCreateAccount(ActionEvent event) throws IOException {
     	
-    	FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("createAccount.fxml"));
+    	FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("register.fxml"));
 		
 		fxmlLoader.setController(this);    	
 		Parent createPane = fxmlLoader.load();
@@ -57,8 +63,8 @@ public class ClassroomGUI {
     @FXML
     public void loadLogin(ActionEvent event) throws IOException {
     	
+    	
     	FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("login.fxml"));
-		
 		fxmlLoader.setController(this);
 		Parent loginPane = fxmlLoader.load();
     	
@@ -82,35 +88,66 @@ public class ClassroomGUI {
     private TextField txtUsernameL;
 
     @FXML
-    private PasswordField txtPasswordL;
+    private PasswordField txtPasswordLogin;
 
    
     
     @FXML
-    public void loginAccount(ActionEvent event) {
+    public void loginAccount(ActionEvent event) throws IOException {
     	
-    	if(classroom.searchForAccount(txtUsernameL.getText())) {
-    		if(classroom.verifyPassword(txtUsernameL.getText(), txtPasswordL.getText())) {
-    			
-    		}else {
-    			
-    			Alert alert = new Alert(AlertType.WARNING);
-        	    alert.setTitle("Classroom");
-        	    alert.setHeaderText("Problem with password");
-        	    alert.setContentText("Wrong password, please verify");
-
-        	    alert.showAndWait();
-    			
-    		}
-    	}else {
+    	if(!blanksRequiredL()) {
     		
     		Alert alert = new Alert(AlertType.WARNING);
     	    alert.setTitle("Classroom");
-    	    alert.setHeaderText("Problem with login");
-    	    alert.setContentText("The username isn´t resgistered, please verify");
+    	    alert.setHeaderText("Problem with registration");
+    	    alert.setContentText("All blanks are required, please verify");
 
     	    alert.showAndWait();
     		
+    	}else {
+	    	String user = txtUsernameL.getText();
+	    	String password = txtPasswordLogin.getText();
+	    	if(classroom.searchForAccount(user)) {
+	    		if(classroom.verifyPassword(password, user)) {
+	    			
+	    			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("account-list.fxml"));
+	    			
+	    			fxmlLoader.setController(this);
+	    			Parent accountList = fxmlLoader.load();
+	    	    	
+	    			mainPanel.getChildren().clear();
+	    	    	mainPanel.setCenter(accountList);
+	    	    	usernameAccountList.setText(user);
+	    	    	
+	    	    	File imagePath = new File(classroom.getUserImage(user));
+	    	    	Image userImage = new Image(imagePath.toURI().toString());
+	    	    	imageUser.setImage(userImage);
+	    	    	
+	    	    	initializeTableView();
+	    	    	
+	    	    	
+	    			
+	    			
+	    		}else {
+	    			
+	    			Alert alert = new Alert(AlertType.WARNING);
+	        	    alert.setTitle("Classroom");
+	        	    alert.setHeaderText("Problem with password");
+	        	    alert.setContentText("Wrong password, please verify");
+	
+	        	    alert.showAndWait();
+	    			
+	    		}
+	    	}else {
+	    		
+	    		Alert alert = new Alert(AlertType.WARNING);
+	    	    alert.setTitle("Classroom");
+	    	    alert.setHeaderText("Problem with login");
+	    	    alert.setContentText("The username isn´t resgistered, please verify");
+	
+	    	    alert.showAndWait();
+	    		
+	    	}
     	}
 
     }
@@ -127,7 +164,7 @@ public class ClassroomGUI {
     }
     
     
-    //FXML elements and control for createAccount 
+    //FXML elements and control for register
     
     @FXML
     private TextField txtUsernameC;
@@ -211,8 +248,8 @@ public class ClassroomGUI {
     		String username = txtUsernameC.getText(); //get data from user to create account
     		if(!classroom.searchForAccount(username)) {
     			String password = txtPassword.getText();
-    			String image = txtPhotoC.getText();
-    			String genderS = ((RadioButton)gender.getSelectedToggle()).getText();
+    			String image =  txtPhotoC.getText();
+    			String genderS = ((RadioButton)gender.getSelectedToggle()).getText().toUpperCase();
     			String career = "";
     			if(softwareCheck.isSelected()) {
     				career += softwareCheck.getText();
@@ -259,6 +296,49 @@ public class ClassroomGUI {
     	mainPanel.setCenter(loginPane);
     }
     
+    //FXML elements and controls for account-list
+    
+    @FXML
+    private TableView<UserAccount> accounts;
+
+    @FXML
+    private TableColumn<UserAccount, String> tvUser;
+
+    @FXML
+    private TableColumn<UserAccount, String> tvGender;
+
+    @FXML
+    private TableColumn<UserAccount, String> tvCareer;
+
+    @FXML
+    private TableColumn<UserAccount, String> tvBirthday;
+
+    @FXML
+    private TableColumn<UserAccount, String> tvBrowser;
+
+    @FXML
+    private Label usernameAccountList;
+
+    @FXML
+    private ImageView imageUser;
+
+    @FXML
+    public void logOut(ActionEvent event) throws IOException {
+    	loadLogin(null);
+    }
+
+    private void initializeTableView() {
+    	ObservableList<UserAccount> observableList;
+    	observableList = FXCollections.observableArrayList(Classroom.getAccounts());
+    	
+		accounts.setItems(observableList);
+		tvUser.setCellValueFactory(new PropertyValueFactory<UserAccount,String>("username"));
+		tvGender.setCellValueFactory(new PropertyValueFactory<UserAccount,String>("gender"));
+		tvCareer.setCellValueFactory(new PropertyValueFactory<UserAccount,String>("degree"));
+		tvGender.setCellValueFactory(new PropertyValueFactory<UserAccount,String>("gender"));
+		tvBirthday.setCellValueFactory(new PropertyValueFactory<UserAccount,String>("date"));
+		tvBrowser.setCellValueFactory(new PropertyValueFactory<UserAccount,String>("browser"));
+    }
     //Validations
     
     public boolean blanksRequired() {
@@ -280,6 +360,17 @@ public class ClassroomGUI {
 		}
 		return ready;
     	
+    }
+    
+    public boolean blanksRequiredL() {
+    	boolean ready=true;
+    	
+    	if (txtUsernameL.getText().equals(" ") || txtUsernameL.getText().equals("")) {
+    		ready=false;
+    	}else if (txtPasswordLogin.getText().equals(null)|| txtPasswordLogin.getText().equals("")) {
+			ready=false;
+    	}
+    	return ready;
     }
     
 }

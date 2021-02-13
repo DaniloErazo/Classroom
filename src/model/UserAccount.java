@@ -16,6 +16,7 @@ public class UserAccount {
 		
 		username  = user;
 		password = pass;
+		photo=pic;
 		this.gender = gender;
 		degree = career;
 		date = dat;
@@ -32,6 +33,22 @@ public class UserAccount {
 
 	public String getPassword() {
 		return password;
+	}
+
+	public Gender getGender() {
+		return gender;
+	}
+
+	public String getDegree() {
+		return degree;
+	}
+
+	public LocalDate getDate() {
+		return date;
+	}
+
+	public Browser getBrowser() {
+		return browser;
 	}
 	
 

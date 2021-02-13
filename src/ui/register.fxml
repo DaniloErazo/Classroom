@@ -69,14 +69,14 @@
             <CheckBox fx:id="softwareCheck" layoutX="280.0" layoutY="257.0" mnemonicParsing="false" text="Software Engineering" />
             <CheckBox fx:id="telematicsCheck" layoutX="280.0" layoutY="279.0" mnemonicParsing="false" text="Telematics Engineering" />
             <CheckBox fx:id="industrialCheck" layoutX="281.0" layoutY="301.0" mnemonicParsing="false" text="Industrial Engineering" />
-            <TextField fx:id="txtUsernameC" layoutX="283.0" layoutY="94.0" text="" />
-            <TextField fx:id="txtPhotoC" layoutX="283.0" layoutY="166.0" />
-            <RadioButton fx:id="maleBttn" layoutX="279.0" layoutY="212.0" mnemonicParsing="false" text="Male">
+            <TextField fx:id="txtUsernameC" layoutX="283.0" layoutY="94.0" text=" " />
+            <TextField fx:id="txtPhotoC" layoutX="283.0" layoutY="166.0" text=" " />
+            <RadioButton fx:id="maleBttn" layoutX="279.0" layoutY="212.0" mnemonicParsing="false" text="MALE">
                <toggleGroup>
                   <ToggleGroup fx:id="gender" />
                </toggleGroup></RadioButton>
-            <RadioButton fx:id="otherBttn" layoutX="431.0" layoutY="212.0" mnemonicParsing="false" text="Other" toggleGroup="$gender" />
-            <RadioButton fx:id="femaleBttn" layoutX="345.0" layoutY="212.0" mnemonicParsing="false" text="Female" toggleGroup="$gender" />
+            <RadioButton fx:id="otherBttn" layoutX="431.0" layoutY="212.0" mnemonicParsing="false" text="OTHER" toggleGroup="$gender" />
+            <RadioButton fx:id="femaleBttn" layoutX="345.0" layoutY="212.0" mnemonicParsing="false" text="FEMALE" toggleGroup="$gender" />
             <Button layoutX="171.0" layoutY="421.0" mnemonicParsing="false" onAction="#signInAfterCreate" style="-fx-background-color: #6ede66;" text="Sign In">
                <font>
                   <Font size="18.0" />
