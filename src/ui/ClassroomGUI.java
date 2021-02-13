@@ -143,7 +143,7 @@ public class ClassroomGUI {
 	    		Alert alert = new Alert(AlertType.WARNING);
 	    	    alert.setTitle("Classroom");
 	    	    alert.setHeaderText("Problem with login");
-	    	    alert.setContentText("The username isn´t resgistered, please verify");
+	    	    alert.setContentText("The username isnÂ´t resgistered, please verify");
 	
 	    	    alert.showAndWait();
 	    		
@@ -253,10 +253,12 @@ public class ClassroomGUI {
     			String career = "";
     			if(softwareCheck.isSelected()) {
     				career += softwareCheck.getText();
-    			}else if (telematicsCheck.isSelected()) {
-    				career += telematicsCheck.getText();
-    			}else if (industrialCheck.isSelected()) {
-    				career += industrialCheck.getText();
+    			}
+			if(telematicsCheck.isSelected()) {
+    				career += " " + telematicsCheck.getText();
+    			}
+			if (industrialCheck.isSelected()) {
+    				career += " " + industrialCheck.getText();
     			}
     			
     			LocalDate birthday = txtBirthday.getValue();
